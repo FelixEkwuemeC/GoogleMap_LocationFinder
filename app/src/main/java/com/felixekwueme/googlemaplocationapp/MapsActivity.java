@@ -3,7 +3,9 @@ package com.felixekwueme.googlemaplocationapp;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -18,6 +20,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
@@ -94,6 +100,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.addMarker(new MarkerOptions().position(myLocation).title("Your Location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+
+        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+        try {
+            List<Address> listAddresses =geocoder.getFromLocation(lat, lng, 1);
+            if (listAddresses != null && listAddresses.size()>0 ){
+                Log.i("PlaceInfo", listAddresses.get(0).toString());
+
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
